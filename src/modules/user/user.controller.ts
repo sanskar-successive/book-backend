@@ -15,7 +15,7 @@ class UserController {
   public getAll = async (req: Request, res: Response, next : NextFunction): Promise<void> => {
     try {
       const users: IUser[] | null = await this.userService.getAll();
-      // res.send(SystemResponse.success('fetched users', 200, users));
+     
       SystemResponse.success(res, "user created successfully", users);
     } catch (error) {
       next(error);
@@ -35,8 +35,6 @@ class UserController {
   public createNew = async (req: Request, res: Response, next : NextFunction): Promise<void> => {
     try {
       const user: IUser | null = await this.userService.createNew(req.body);
-      // res.status(201).json({ message: "user created successfully", user });
-      // res.send(SystemResponse.success('user created successfully', 201, user));
       SystemResponse.success(res, "user created successfully", user);
 
     } catch (error) {
@@ -53,7 +51,6 @@ class UserController {
         updatedUserData
       );
       res.json({ message: "user updated successfully", updatedUser });
-      // res.send(SystemResponse.success("user updated successfully", 201, updatedUser));
     } catch (error) {
       next(error);
     }
@@ -64,7 +61,6 @@ class UserController {
       const { userId } = req.params;
       const deletedUser: IUser | null = await this.userService.delete(userId);
       res.json({ message: "user deleted successfully", deletedUser });
-      // res.send(SystemResponse.success("user deleted successfully", 201, deletedUser));
     } catch (error) {
       next(error);
     }
@@ -85,7 +81,6 @@ class UserController {
         const token: string = jwt.sign(userDetails, "123");
         res.cookie("authToken", token);
         res.status(201).json({ message: "user logged in successfully" });
-        // res.send(SystemResponse.success('user logged in successfully', 200, userInDb));
       }
     } catch (error) {
       next(error);

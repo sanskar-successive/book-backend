@@ -46,7 +46,7 @@ class BookController {
         req.body
       );
       res
-        .status(200)
+        .status(201)
         .json({ message: "book created successfully", createdBook });
     } catch (error) {
       res.status(404).json(error);
@@ -61,7 +61,7 @@ class BookController {
         bookId,
         updatedDetails
       );
-      res.json({ message: "book updated successfully", updatedBook });
+      res.status(201).json({ message: "book updated successfully", updatedBook });
     } catch (error) {
       res.status(404).json(error);
     }
@@ -70,7 +70,7 @@ class BookController {
   public deleteAll = async (req: Request, res: Response): Promise<void> => {
     try {
       await this.bookService.deleteAll();
-      res.json({ message: "all books deleted successfully" });
+      res.status(201).json({ message: "all books deleted successfully" });
     } catch (error) {
       res.status(404).json(error);
     }
@@ -80,7 +80,7 @@ class BookController {
     try {
       const { bookId } = req.params;
       const deletedBook = await this.bookService.delete(bookId);
-      res.json({ message: "book deleted successfully", deletedBook });
+      res.status(201).json({ message: "book deleted successfully", deletedBook });
     } catch (error) {
       res.status(404).json(error);
     }
@@ -93,47 +93,29 @@ class BookController {
 
       if (csvFile) {
         const filePath = csvFile.path;
-        // start processing csv file in worker-thread
+        
 
         const numThreads = 4;
 
-        // Calculate chunk size for each thread
+        
         const fileStats = fs.statSync(filePath);
         const fileSize = fileStats.size;
         const chunkSize = Math.ceil(fileSize / numThreads);
 
-        // Create worker threads
+        
         for (let i = 0; i < numThreads; i++) {
           const start = i * chunkSize;
           const end = Math.min(fileSize, (i + 1) * chunkSize - 1);
 
           const worker = new Worker("./dist/worker2.js", {
-            workerData: { id: i, start, end, filePath: filePath }, // Provide the file path
+            workerData: { id: i, start, end, filePath: filePath }, 
           });
 
-          // worker.on('message', (msg) => {
-          //   console.log(`Main thread received message from worker ${i}: ${msg}`);
-          // });
-
-          // worker.on('error', (err) => {
-          //   console.error(`Worker ${i} encountered an error: ${err}`);
-          // });
-
-          // worker.on('exit', (code) => {
-          //   if (code !== 0) {
-          //     console.error(`Worker ${i} exited with code ${code}`);
-          //   }
-          // });
-
-          // const worker = new Worker("./dist/worker2.js", {
-          //   workerData: { filePath },
-          // });
+     
 
           const startTime = Date.now();
 
-          // res.send("CSV processing started. Check console for updates.");
-
-          // listen messages from worker thread
+          
           worker.on("message", (message) => {
             const endTime = Date.now();
             console.log((endTime - startTime) / 1000);
@@ -144,7 +126,7 @@ class BookController {
             console.log(message);
           });
 
-          // handle errors from worker thread
+          
           worker.on("error", (error) => {
             console.error(`worker ${i} thread error ==> ${error}`);
           });
@@ -213,16 +195,15 @@ class BookController {
       }
     }
 
-    let categoryToFilter = allCategories,
-      languageToFilter = allLanguages,
-      minPrice = 50,
-      maxPrice = 2000,
-      minRating = 0,
-      skip = 0,
-      limit = 10
+    let categoryToFilter,
+      languageToFilter,
+      minPrice ,
+      maxPrice ,
+      minRating,
+      skip ,
+      limit
 
     if (Object.keys(query).includes("category")) {
-      // console.log(query["category"]);
       if (Array.isArray(query["category"]))
         categoryToFilter = query["category"];
       else categoryToFilter = Array(query["category"]);
@@ -383,7 +364,7 @@ class BookController {
 
           step: async function (result) {
             try {
-              // console.log(result);
+             
 
               const rowData = result.data;
 
@@ -396,7 +377,7 @@ class BookController {
               });
 
               if (error) {
-                // console.log(error);
+               
                 errorCount += 1;
                 const bulkErrorDetail: IBulkError = {
                   rowNumber: parsedDataCount,

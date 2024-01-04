@@ -12,25 +12,6 @@ const authorSchema: Schema<IAuthor> = new mongoose.Schema({
   },
 });
 
-// const reviewSchema: Schema<IReview> = new mongoose.Schema({
-//   userId: {
-//     type: String,
-//     required: true,
-//   },
-//   bookId: {
-//     type: String,
-//     required: true,
-//   },
-//   rating: {
-//     type: Number,
-//     required: true,
-//   },
-//   text: {
-//     type: String,
-//     required: true,
-//   },
-//   positive: { type: Boolean },
-// }, {timestamps : true});
 
 const moreDetailsSchema: Schema<IMoreDetails> = new mongoose.Schema({
   publisher: {

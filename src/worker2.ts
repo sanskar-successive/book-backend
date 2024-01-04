@@ -80,13 +80,6 @@ const processCSV = (start:any,end:any) => {
           console.log(jsonData);
           
 
-          // console.log(jsonData);
-
-          // if(jsonData.rating===0){
-          //   console.log(jsonData);
-
-          //   throw new Error('db write error');
-          // }
 
           bulkOps.push({
             insertOne: {
@@ -95,14 +88,14 @@ const processCSV = (start:any,end:any) => {
           });
 
           if (bulkOps.length === batchSize) {
-            // await executeBulkWrite(bulkOps);
+            
             await bookService.bulkWrite(bulkOps);
             bulkOps = [];
           }
 
           callback();
         } catch (error) {
-          // console.error("Error during bulk write:", error);
+         
 
           errorData.push({
             row: rowCount,
@@ -116,12 +109,11 @@ const processCSV = (start:any,end:any) => {
     });
 
 
-    // const start1 : any = findStartOfFile(filePath, workerData.start, workerData.end);
+    
     const readStream = fs.createReadStream(filePath, { start, end });
 
     readStream
-      // .pipe(csvtojson({ checkType: true,ignoreEmpty:true }))
-      // .pipe(fastCsv.parse({ headers: true, ignoreEmpty: true }))
+      
       .pipe(csvParser())
       .on('data', (data)=>{
         console.log(JSON.parse(data.toString()));
@@ -129,38 +121,25 @@ const processCSV = (start:any,end:any) => {
       })
       .pipe(validationCheckStream)
       .on("error", async (error) => {
-        // if (validatedData.error) {
-        // await handleError("Validation", new Error(error));
+        
 
         console.log("error hai validation wale mei", error);
 
-        /* Store the error or handle it as needed */
-        // }
+        
       })
       .pipe(dbWriteStream)
       .on("error", async (error) => {
-        // await handleError("Writing to MongoDB", error, null)
+        
         console.log("error hai db write mei", error);
       })
       .on("finish", async () => {
-        // Insert any remaining documents in the bulk write array
+        
         if (bulkOps.length > 0) {
           await bookService.bulkWrite(bulkOps);
-          // await executeBulkWrite(bulkOps);
-          // console.log("Bulk write successful.");
+         
         }
 
-        // Send a message back to the main thread
-
-        // send message about bulk write operations if any
-
-        // console.log(errorData);
-
-        // if(errorCount){
-        //   console.log(errorData);
-          
-        // }
-
+      
         parentPort?.postMessage({
           rowsProcessed: rowCount,
           errorOccured: errorCount,
@@ -170,7 +149,7 @@ const processCSV = (start:any,end:any) => {
   } 
   // eslint-disable-next-line
   catch (error: any) {
-    // Handle errors and send them back to the main thread
+   
 
     if (error.code === 11000)
       parentPort?.postMessage({

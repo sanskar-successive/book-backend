@@ -6,8 +6,6 @@ const router = express.Router();
 
 const userController = new UserController();
 
-// router.use(dynamicValidationMiddleware);
-
 router.post('/', userController.createNew);
 router.get('/', authMiddleware, userController.getAll);
 router.get('/:userId', authMiddleware, userController.getById);

@@ -6,12 +6,12 @@ class DBConnection {
 
   private constructor() {}
 
-  public static getInstance = (): DBConnection =>{
+  public static getInstance = (): DBConnection => {
     if (!DBConnection.instance) {
       DBConnection.instance = new DBConnection();
     }
     return DBConnection.instance;
-  }
+  };
 
   public connectDB = async (): Promise<void> => {
     try {
@@ -20,6 +20,10 @@ class DBConnection {
     } catch (err) {
       console.log("connection to db failed");
     }
+  };
+
+  public closeDBConnection = async (): Promise<void> => {
+    await mongoose.connection.close();
   };
 }
 
