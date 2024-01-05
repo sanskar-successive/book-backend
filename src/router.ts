@@ -5,7 +5,7 @@ import userRoutes from './modules/user/user.routes'
 const router = express.Router();
 
 router.use('/api', bookRoutes)
-router.use('/api/auth', userRoutes);
+router.use('/users', userRoutes);
 
 
 export default router;

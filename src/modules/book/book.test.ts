@@ -1,6 +1,10 @@
 import request from "supertest";
 import DBConnection from "../../lib/config/dbConnection";
 import Server from "../../server";
+import BookController from "./book.controller";
+import BookService from "./book.service";
+import { Request, Response } from "express";
+import { IBook } from "./entities/IBook";
 
 const dbConnection = DBConnection.getInstance();
 const server = Server.getInstance(dbConnection);
@@ -14,19 +18,115 @@ afterEach(async () => {
 });
 
 let testBookId: string;
+const mockBook1 = {
+  title: "mock book 1",
+  coverImage: "https://xsgames.co/randomusers/avatar.php?g=pixel&key=58",
+  category: "horror",
+  author: {
+    name: "Stephen Miller",
+    about:
+      "Valetudo tonsor odit inflammatio. Statim aggredior vesper audacia them...",
+  },
+  rating: 3,
+  price: 465,
+  moreDetails: {
+    publisher: "Yundt - O'Kon",
+    firstPublished: new Date(),
+    seller: "Wisoky LLC",
+    language: "telugu",
+    description:
+      "Tabgo denuncio uter tutis consequuntur. Carbo aliqua molestiae demitto...",
+    fileSize: 3070,
+    pages: 561,
+    verified: true,
+    edition: 4,
+  },
+};
+const mockBook2 = {
+  title: "mock book 2",
+  coverImage: "https://xsgames.co/randomusers/avatar.php?g=pixel&key=58",
+  category: "horror",
+  author: {
+    name: "Stephen Miller",
+    about:
+      "Valetudo tonsor odit inflammatio. Statim aggredior vesper audacia them...",
+  },
+  rating: 3,
+  price: 465,
+  moreDetails: {
+    publisher: "Yundt - O'Kon",
+    firstPublished: new Date(),
+    seller: "Wisoky LLC",
+    language: "telugu",
+    description:
+      "Tabgo denuncio uter tutis consequuntur. Carbo aliqua molestiae demitto...",
+    fileSize: 3070,
+    pages: 561,
+    verified: true,
+    edition: 4,
+  },
+};
+
+describe("BookController", () => {
+  let bookController: BookController;
+  let bookService: BookService;
+  let mockRequest: Partial<Request>;
+  let mockResponse: Partial<Response>;
+
+  beforeEach(() => {
+    bookService = new BookService();
+    bookController = new BookController();
+    mockRequest = {};
+    mockResponse = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+  });
+
+  test("getAll returns a list of books", async () => {
+    // Mock the bookService.getAll method
+    const mockBooks: IBook[] = [mockBook1, mockBook2];
+    jest.spyOn(bookService, "getAll").mockResolvedValueOnce(mockBooks);
+
+    // Call the getAll method with the mocked request and response
+    await bookController.getAll(
+      mockRequest as Request,
+      mockResponse as Response
+    );
+
+    // Assert that the response status is 200 and json is called with the expected data
+    expect(mockResponse.status).toHaveBeenCalledWith(200);
+    expect(mockResponse.json).toHaveBeenCalledWith(mockBooks);
+  });
+
+  test("getAll handles errors correctly", async () => {
+    // Mock an error in the bookService.getAll method
+    const mockError = new Error("Test error");
+    jest.spyOn(bookService, "getAll").mockRejectedValueOnce(mockError);
+
+    // Call the getAll method with the mocked request and response
+    await bookController.getAll(
+      mockRequest as Request,
+      mockResponse as Response
+    );
+
+    // Assert that the response status is 404 and json is called with the error
+    expect(mockResponse.status).toHaveBeenCalledWith(404);
+    expect(mockResponse.json).toHaveBeenCalledWith(mockError);
+  });
+});
 
 describe("GET /api/books", () => {
   test("should return all books", async () => {
-    let res = await request(server.getApp()).get("/api/books");
+    const res = await request(server.getApp()).get("/api/books");
 
     expect(res.statusCode).toBe(200);
     expect(res.body.length).toBeGreaterThanOrEqual(0);
+  });
 
-
-    // res = await request(server.getApp()).get("/api/books");
-    // expect(res.statusCode).toBe(404);
-    // expect(res.body.length).toBe(0);
-
+  test("should not return books", async () => {
+    const res = await request(server.getApp()).get("/api/books");
+    expect(res.statusCode).toBe(404);
   });
 });
 

@@ -23,8 +23,6 @@ export const userSchema = Joi.object({
   }),
   password: Joi.string().required(),
   confirmPassword: Joi.string().required(),
-  profilePic: Joi.string(),
-  library: librarySchema,
 });
 
 

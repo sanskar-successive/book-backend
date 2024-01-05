@@ -1,9 +1,8 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import ILogin from "./entities/ILogin";
 import UserService from "./user.service";
 import { IUser } from "./entities/IUser";
-import SystemResponse from "../../lib/config/responseHandler";
 
 class UserController {
   private userService: UserService;
@@ -12,37 +11,35 @@ class UserController {
     this.userService = new UserService();
   }
 
-  public getAll = async (req: Request, res: Response, next : NextFunction): Promise<void> => {
+  public getAll = async (req: Request, res: Response): Promise<void> => {
     try {
       const users: IUser[] | null = await this.userService.getAll();
-     
-      SystemResponse.success(res, "user created successfully", users);
+      res.status(200).json({message : "users fetched successfully", users})
     } catch (error) {
-      next(error);
+      res.status(404).json(error);
     }
   };
 
-  public getById = async (req: Request, res: Response, next : NextFunction): Promise<void> => {
+  public getById = async (req: Request, res: Response): Promise<void> => {
     try {
       const { userId } = req.params;
       const user: IUser | null = await this.userService.getById(userId);
-      res.status(200).json(user);
+      res.status(200).json({message : "user fetched successfully", user});
     } catch (error) {
-      next(error);
+      res.status(404).json(error)
     }
   };
 
-  public createNew = async (req: Request, res: Response, next : NextFunction): Promise<void> => {
+  public createNew = async (req: Request, res: Response): Promise<void> => {
     try {
       const user: IUser | null = await this.userService.createNew(req.body);
-      SystemResponse.success(res, "user created successfully", user);
-
+      res.status(201).json({message : "user created successfully", user});
     } catch (error) {
-      next(error);
+      res.status(404).json(error)
     }
   };
 
-  public update = async (req: Request, res: Response, next : NextFunction): Promise<void> => {
+  public update = async (req: Request, res: Response): Promise<void> => {
     try {
       const { userId } = req.params;
       const updatedUserData = req.body;
@@ -50,23 +47,23 @@ class UserController {
         userId,
         updatedUserData
       );
-      res.json({ message: "user updated successfully", updatedUser });
+      res.status(201).json({ message: "user updated successfully", updatedUser });
     } catch (error) {
-      next(error);
+      res.status(404).json(error)
     }
   };
 
-  public delete = async (req: Request, res: Response, next : NextFunction): Promise<void> => {
+  public delete = async (req: Request, res: Response): Promise<void> => {
     try {
       const { userId } = req.params;
       const deletedUser: IUser | null = await this.userService.delete(userId);
-      res.json({ message: "user deleted successfully", deletedUser });
+      res.status(200).json({ message: "user deleted successfully", deletedUser });
     } catch (error) {
-      next(error);
+      res.status(404).json(error)
     }
   };
 
-  public login = async (req: Request, res: Response, next : NextFunction): Promise<void> => {
+  public login = async (req: Request, res: Response): Promise<void> => {
     try {
       const userDetails: ILogin = req.body;
       const userInDb: IUser | null = await this.userService.getByEmail(
@@ -80,10 +77,10 @@ class UserController {
       } else {
         const token: string = jwt.sign(userDetails, "123");
         res.cookie("authToken", token);
-        res.status(201).json({ message: "user logged in successfully" });
+        res.status(200).json({ message: "user logged in successfully" });
       }
     } catch (error) {
-      next(error);
+      res.status(404).json(error)
     }
   };
 }

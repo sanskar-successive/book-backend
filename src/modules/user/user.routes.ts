@@ -7,10 +7,10 @@ const router = express.Router();
 const userController = new UserController();
 
 router.post('/', userController.createNew);
-router.get('/', authMiddleware, userController.getAll);
-router.get('/:userId', authMiddleware, userController.getById);
-router.patch('/:userId', authMiddleware, userController.update);
-router.delete('/:userId', authMiddleware, userController.delete);
+router.get('/', userController.getAll);
+router.get('/:userId', userController.getById);
+router.patch('/:userId', userController.update);
+router.delete('/:userId', userController.delete);
 router.post('/login', userController.login);
 
 

@@ -104,9 +104,5 @@ bookSchema.index(
 
 const Book = mongoose.model<IBook>("Book", bookSchema);
 
-Book.on('index', error => {
-  console.log(error.message);
-});
-
 
 export default Book;

@@ -322,7 +322,7 @@ class BookController {
     try {
       const session_id: string = uuidv4();
       const startTime = Date.now();
-      const batchSize = 1000;
+      const batchSize = 900;
       let parsedDataCount = 0;
       let errorCount = 0;
       // eslint-disable-next-line
