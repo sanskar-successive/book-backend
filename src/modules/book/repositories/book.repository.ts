@@ -22,9 +22,5 @@ class BookRepository extends BaseRepository<IBook> {
   public getAllBulkUploads = async () : Promise<IBulkUpload[]> =>{
     return await BulkUpload.find().limit(10);
   }
-
-  public getAllBulkUploadById = async (id : string | ObjectId) : Promise<IBulkUpload | null> =>{
-    return await BulkUpload.findById(id);
-  }
 }
 export default BookRepository;

@@ -9,7 +9,7 @@ export const moreDetailsSchema = Joi.object({
   publisher: Joi.string().required(),
   firstPublished: Joi.date(),
   seller: Joi.string().required(),
-  language: Joi.string().valid('english', 'hindi', 'sanskrit', 'telugu', 'bengali', 'tamil').required(),
+  text_language: Joi.string().valid('english', 'hindi', 'sanskrit', 'telugu', 'bengali', 'tamil').required(),
   description: Joi.string().required(),
   fileSize: Joi.number().required(),
   pages: Joi.number().required(),

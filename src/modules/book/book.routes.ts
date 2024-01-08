@@ -11,7 +11,7 @@ const upload = multer({ dest: "uploads/" });
 router.post(
   "/bulk-upload",
   upload.single("file"),
-  bookController.bulkUsingPapaParse
+  bookController.bulkUsingPapaParse2
 );
 
 router.get("/search", bookController.search);

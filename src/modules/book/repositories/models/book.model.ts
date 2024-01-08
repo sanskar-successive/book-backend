@@ -25,7 +25,7 @@ const moreDetailsSchema: Schema<IMoreDetails> = new mongoose.Schema({
     type: String,
     required: true,
   },
-  language: {
+  text_language: {
     type: String,
     enum: ["english", "hindi", "sanskrit", "telugu", "bengali", "tamil"],
     required: true,
@@ -51,6 +51,7 @@ const bookSchema: Schema<IBook> = new mongoose.Schema(
     title: {
       type: String,
       required: true,
+      unique:true
     },
     coverImage: { type: String },
     category: {

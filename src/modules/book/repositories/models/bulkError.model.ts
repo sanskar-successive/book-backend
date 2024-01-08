@@ -3,7 +3,7 @@ import IBulkError from "../../entities/IBulkError";
 
 const bulkErrorSchema: Schema<IBulkError> = new mongoose.Schema(
   {
-    rowNumber: { type: Number, required: true },
+    rowNumber: { type: Number, required: true,unique:true },
     errorDetails: { type: Object, required: true },
     session_id : {type : String, required : true}
   },

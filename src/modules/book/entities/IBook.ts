@@ -23,7 +23,7 @@ export interface IReview{
 
 export interface IMoreDetails{
     seller : string,
-    language : string,
+    text_language : string,
     description : string,
     fileSize : number,
     pages : number,
