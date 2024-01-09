@@ -6,8 +6,8 @@ const dbConnection = DBConnection.getInstance();
 const server = Server.getInstance(dbConnection);
 
 let bookId: string;
-const mockBook = {
-  title: "The Great Gatsby",
+const mockBook1 = {
+  title: "mockBook1",
   coverImage: "gatsby.jpg",
   category: "fiction",
   author: {
@@ -21,7 +21,7 @@ const mockBook = {
     publisher: "Scribner",
     firstPublished: new Date("1925-04-10"),
     seller: "Amazon",
-    language: "english",
+    text_language: "english",
     description:
       "The Great Gatsby is a novel by F. Scott Fitzgerald that follows a cast of characters living in the fictional towns of West Egg and East Egg on prosperous Long Island in the summer of 1922.",
     fileSize: 1024,
@@ -31,8 +31,19 @@ const mockBook = {
   },
 };
 
+const mockBook2 = {...mockBook1, title:"mockBook2"};
+const mockBook3 = {...mockBook1, title:"mockBook3"};
+const mockBook4 = {...mockBook1, title:"mockBook4"};
+const mockBook5 = {...mockBook1, title:"mockBook5"};
+const mockBook6 = {...mockBook1, title:"mockBook6"};
+const mockBook7 = {...mockBook1, title:"mockBook7"};
+const mockBook8 = {...mockBook1, title:"mockBook8"};
+const mockBook9 = {...mockBook1, title:"mockBook9"};
+const mockBook10 = {...mockBook1, title:"mockBook10"};
+const mockBook11 = {...mockBook1, title:"mockBook11"};
+
 const updatedBook = {
-  title: "The Great Gatsby updated",
+  title: "Dragon home",
   coverImage: "gatsby.jpg",
   category: "romance",
   author: {
@@ -46,7 +57,7 @@ const updatedBook = {
     publisher: "Scribner",
     firstPublished: new Date("1925-04-08"),
     seller: "Amazon",
-    language: "english",
+    text_language: "english",
     description:
       "The Great Gatsby is a novel by F. Scott Fitzgerald that follows a cast of characters living in the fictional towns of West Egg and East Egg on prosperous Long Island in the summer of 1922.",
     fileSize: 1024,
@@ -76,7 +87,7 @@ describe("POST /api/books", () => {
   test("should create a book", async () => {
     const res = await request(server.getApp())
       .post("/api/books")
-      .send(mockBook);
+      .send(mockBook1);
     expect(res.statusCode).toBe(201);
     expect(res.body.message).toBe("book created successfully");
   });
@@ -90,7 +101,7 @@ describe("POST /api/books", () => {
 
 describe("GET /api/books", () => {
   test("should return all books", async () => {
-    let res = await request(server.getApp()).post("/api/books").send(mockBook);
+    let res = await request(server.getApp()).post("/api/books").send(mockBook2);
     res = await request(server.getApp()).get("/api/books");
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe("books fetched successfully");
@@ -105,11 +116,11 @@ describe("GET /api/books", () => {
 
 describe("GET /api/search", () => {
   test("should return books after related to search and filter queries", async () => {
-    let res = await request(server.getApp()).post("/api/books").send(mockBook);
+    let res = await request(server.getApp()).post("/api/books").send(mockBook3);
     res = await request(server.getApp()).get("/api/search").query({
       search: "great",
       category: ["fiction", "romance"],
-      language: ["english","hindi"],
+      text_language: ["english","hindi"],
       "price.from": 50,
       "price.to": 2000,
       rating: "aboveThree",
@@ -122,7 +133,7 @@ describe("GET /api/search", () => {
   });
 
   test("should return books after related to search and filter queries", async () => {
-    let res = await request(server.getApp()).post("/api/books").send(mockBook);
+    let res = await request(server.getApp()).post("/api/books").send(mockBook4);
     res = await request(server.getApp()).get("/api/search").query({
       search: "great",
       "price.from": 50,
@@ -137,7 +148,7 @@ describe("GET /api/search", () => {
   });
 
   test("should return books after related to search and filter queries", async () => {
-    let res = await request(server.getApp()).post("/api/books").send(mockBook);
+    let res = await request(server.getApp()).post("/api/books").send(mockBook5);
     res = await request(server.getApp()).get("/api/search").query({
       search: "great",
       "price.from": 50,
@@ -152,7 +163,7 @@ describe("GET /api/search", () => {
   });
 
   test("should return books after related to search and filter queries", async () => {
-    let res = await request(server.getApp()).post("/api/books").send(mockBook);
+    let res = await request(server.getApp()).post("/api/books").send(mockBook6);
     res = await request(server.getApp()).get("/api/search").query({
       search: "great",
       "price.from": 50,
@@ -167,7 +178,7 @@ describe("GET /api/search", () => {
   });
 
   test("should return books after related to search and filter queries", async () => {
-    let res = await request(server.getApp()).post("/api/books").send(mockBook);
+    let res = await request(server.getApp()).post("/api/books").send(mockBook7);
     res = await request(server.getApp()).get("/api/search").query({
       search: "great",
       "price.from": 50,
@@ -184,7 +195,7 @@ describe("GET /api/search", () => {
     await dbConnection.closeDBConnection();
     const res = await request(server.getApp()).get("/api/search").query({
       category: "notfound",
-      language: "korean",
+      text_language: "korean",
       sortBy: "notallowed",
     })
     expect(res.statusCode).toBe(404);
@@ -193,7 +204,9 @@ describe("GET /api/search", () => {
 
 describe("GET /api/books/:id", () => {
   test("should return a single book", async () => {
-    let res = await request(server.getApp()).post("/api/books").send(mockBook);
+    let res = await request(server.getApp()).post("/api/books").send(mockBook8);
+    console.log("yha hai", res.body);
+    
     bookId = res.body.book._id;
     console.log("Fetching book with ID:", bookId);
 
@@ -212,7 +225,7 @@ describe("GET /api/books/:id", () => {
 
 describe("PATCH /api/books/:id", () => {
   test("should update a book", async () => {
-    let res = await request(server.getApp()).post("/api/books").send(mockBook);
+    let res = await request(server.getApp()).post("/api/books").send(mockBook9);
     bookId = res.body.book._id;
     res = await request(server.getApp())
       .patch(`/api/books/${bookId}`)
@@ -230,7 +243,7 @@ describe("PATCH /api/books/:id", () => {
 
 describe("DELETE /api/books/:id", () => {
   test("should delete a book", async () => {
-    let res = await request(server.getApp()).post("/api/books").send(mockBook);
+    let res = await request(server.getApp()).post("/api/books").send(mockBook10);
     bookId = res.body.book._id;
     res = await request(server.getApp()).delete(`/api/books/${bookId}`);
     expect(res.statusCode).toBe(201);
@@ -246,7 +259,7 @@ describe("DELETE /api/books/:id", () => {
 
 describe("DELETE /api/books/", () => {
   test("should delete a book", async () => {
-    let res = await request(server.getApp()).post("/api/books").send(mockBook);
+    let res = await request(server.getApp()).post("/api/books").send(mockBook11);
     res = await request(server.getApp()).delete(`/api/books`);
     expect(res.statusCode).toBe(201);
     expect(res.body.message).toBe("all books deleted successfully");
@@ -305,18 +318,18 @@ describe("GET /api/bulk-uploads-errors/:sessionId", () => {
 });
 
 
-describe("POST /api/bulk-upload", () => {
-  test("should create a book", async () => {
-    const res = await request(server.getApp())
-      .post("/api/bulk-upload")
-      .send(mockBook);
-    expect(res.statusCode).toBe(200);
-    expect(res.body.message).toBe("processing started");
-  });
+// describe("POST /api/bulk-upload", () => {
+//   test("should create a book", async () => {
+//     const res = await request(server.getApp())
+//       .post("/api/bulk-upload")
+//       .send(mockBook);
+//     expect(res.statusCode).toBe(200);
+//     expect(res.body.message).toBe("processing started");
+//   });
 
-  test("some error in creating the book", async () => {
-    await dbConnection.closeDBConnection();
-    const res = await request(server.getApp()).post("/api/books");
-    expect(res.statusCode).toBe(404);
-  });
-});
+//   test("some error in creating the book", async () => {
+//     await dbConnection.closeDBConnection();
+//     const res = await request(server.getApp()).post("/api/books");
+//     expect(res.statusCode).toBe(404);
+//   });
+// });

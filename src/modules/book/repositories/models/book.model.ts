@@ -91,14 +91,14 @@ bookSchema.index(
     title: "text",
     'author.name': "text",
     category: "text",
-    'moreDetails.language': "text",
+    'moreDetails.text_language': "text",
   },
   {
     weights: {
       title: 5,
       'author.name': 3,
       category: 3,
-      'moreDetails.language': 2,
+      'moreDetails.text_language': 2,
     },
   }
 );

@@ -383,10 +383,8 @@ class BookController {
       let errorCount = 0;
       // eslint-disable-next-line
       let bulkOps: any[] = [];
-      let bulkOpsCopy: any[] = [];
       // eslint-disable-next-line
       let bulkUploadErrors: any[] = [];
-      let bulkUploadErrorsCopy: any[] = [];
       const csvFile: Express.Multer.File | undefined = req.file;
       console.log(csvFile?.path);
 

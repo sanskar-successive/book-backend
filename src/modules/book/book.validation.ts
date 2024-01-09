@@ -1,10 +1,5 @@
 import Joi from "joi";
 
-
-
-
-
-
 export const moreDetailsSchema = Joi.object({
   publisher: Joi.string().required(),
   firstPublished: Joi.date(),
