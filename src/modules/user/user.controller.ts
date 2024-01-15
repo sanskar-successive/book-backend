@@ -14,9 +14,9 @@ class UserController {
   public getAll = async (req: Request, res: Response): Promise<void> => {
     try {
       const users: IUser[] | null = await this.userService.getAll();
-      res.status(200).json({message : "users fetched successfully", users})
+      res.status(200).send({ message: "users fetched successfully", users })
     } catch (error) {
-      res.status(404).json(error);
+      res.status(404).send(error);
     }
   };
 
@@ -24,18 +24,18 @@ class UserController {
     try {
       const { userId } = req.params;
       const user: IUser | null = await this.userService.getById(userId);
-      res.status(200).json({message : "user fetched successfully", user});
+      res.status(200).send({ message: "user fetched successfully", user });
     } catch (error) {
-      res.status(404).json(error)
+      res.status(404).send(error)
     }
   };
 
   public createNew = async (req: Request, res: Response): Promise<void> => {
     try {
       const user: IUser | null = await this.userService.createNew(req.body);
-      res.status(201).json({message : "user created successfully", user});
+      res.status(201).send({ message: "user created successfully", user });
     } catch (error) {
-      res.status(404).json(error)
+      res.status(404).send(error)
     }
   };
 
@@ -47,9 +47,9 @@ class UserController {
         userId,
         updatedUserData
       );
-      res.status(201).json({ message: "user updated successfully", updatedUser });
+      res.status(201).send({ message: "user updated successfully", updatedUser });
     } catch (error) {
-      res.status(404).json(error)
+      res.status(404).send(error)
     }
   };
 
@@ -57,30 +57,32 @@ class UserController {
     try {
       const { userId } = req.params;
       const deletedUser: IUser | null = await this.userService.delete(userId);
-      res.status(200).json({ message: "user deleted successfully", deletedUser });
+      res.status(200).send({ message: "user deleted successfully", deletedUser });
     } catch (error) {
-      res.status(404).json(error)
+      res.status(404).send(error)
     }
   };
 
-  public login = async (req: Request, res: Response): Promise<void> => {
+  public login = async (req: Request, res: Response) => {
     try {
       const userDetails: ILogin = req.body;
       const userInDb: IUser | null = await this.userService.getByEmail(
         userDetails.email
       );
 
+      console.log(userInDb);
+
       if (!userInDb)
-        res.status(403).json({ message: "user not found (invalid email" });
-      else if (userInDb.password !== userDetails.password) {
-        res.status(403).json({ message: "user invalid password" });
-      } else {
-        const token: string = jwt.sign(userDetails, "123");
-        res.cookie("authToken", token);
-        res.status(200).json({ message: "user logged in successfully" });
+        return res.status(403).send({ message: "invalid email", authorised: false });
+      if (userInDb.password !== userDetails.password) {
+        return res.status(403).send({ message: "invalid password", authorised: false });
       }
+
+      const token: string = jwt.sign(userDetails, "123");
+      return res.status(200).send({ message: "logged in successfully", token: token, authorised: true });
+
     } catch (error) {
-      res.status(404).json(error)
+      res.status(404).send(error)
     }
   };
 }

@@ -1,6 +1,7 @@
 import request from "supertest";
 import DBConnection from "../../lib/config/dbConnection";
 import Server from "../../server";
+import { fstat } from "fs";
 
 const dbConnection = DBConnection.getInstance();
 const server = Server.getInstance(dbConnection);
@@ -31,16 +32,16 @@ const mockBook1 = {
   },
 };
 
-const mockBook2 = {...mockBook1, title:"mockBook2"};
-const mockBook3 = {...mockBook1, title:"mockBook3"};
-const mockBook4 = {...mockBook1, title:"mockBook4"};
-const mockBook5 = {...mockBook1, title:"mockBook5"};
-const mockBook6 = {...mockBook1, title:"mockBook6"};
-const mockBook7 = {...mockBook1, title:"mockBook7"};
-const mockBook8 = {...mockBook1, title:"mockBook8"};
-const mockBook9 = {...mockBook1, title:"mockBook9"};
-const mockBook10 = {...mockBook1, title:"mockBook10"};
-const mockBook11 = {...mockBook1, title:"mockBook11"};
+const mockBook2 = { ...mockBook1, title: "mockBook2" };
+const mockBook3 = { ...mockBook1, title: "mockBook3" };
+const mockBook4 = { ...mockBook1, title: "mockBook4" };
+const mockBook5 = { ...mockBook1, title: "mockBook5" };
+const mockBook6 = { ...mockBook1, title: "mockBook6" };
+const mockBook7 = { ...mockBook1, title: "mockBook7" };
+const mockBook8 = { ...mockBook1, title: "mockBook8" };
+const mockBook9 = { ...mockBook1, title: "mockBook9" };
+const mockBook10 = { ...mockBook1, title: "mockBook10" };
+const mockBook11 = { ...mockBook1, title: "mockBook11" };
 
 const updatedBook = {
   title: "Dragon home",
@@ -120,7 +121,7 @@ describe("GET /api/search", () => {
     res = await request(server.getApp()).get("/api/search").query({
       search: "great",
       category: ["fiction", "romance"],
-      text_language: ["english","hindi"],
+      text_language: ["english", "hindi"],
       "price.from": 50,
       "price.to": 2000,
       rating: "aboveThree",
@@ -206,7 +207,7 @@ describe("GET /api/books/:id", () => {
   test("should return a single book", async () => {
     let res = await request(server.getApp()).post("/api/books").send(mockBook8);
     console.log("yha hai", res.body);
-    
+
     bookId = res.body.book._id;
     console.log("Fetching book with ID:", bookId);
 
@@ -317,19 +318,28 @@ describe("GET /api/bulk-uploads-errors/:sessionId", () => {
   });
 });
 
+import fs from 'fs'
+describe("POST /api/bulk-upload", () => {
+  // test("should create a book", async () => {
+  //   const res = await request(server.getApp())
+  //     .post("/api/bulk-upload")
+  //     .send(mockBook);
+  //   expect(res.statusCode).toBe(200);
+  //   expect(res.body.message).toBe("processing started");
+  // });
 
-// describe("POST /api/bulk-upload", () => {
-//   test("should create a book", async () => {
-//     const res = await request(server.getApp())
-//       .post("/api/bulk-upload")
-//       .send(mockBook);
-//     expect(res.statusCode).toBe(200);
-//     expect(res.body.message).toBe("processing started");
-//   });
+  // test("some error in creating the book", async () => {
+  //   await dbConnection.closeDBConnection();
+  //   const res = await request(server.getApp()).post("/api/books");
+  //   expect(res.statusCode).toBe(404);
+  // });
 
-//   test("some error in creating the book", async () => {
-//     await dbConnection.closeDBConnection();
-//     const res = await request(server.getApp()).post("/api/books");
-//     expect(res.statusCode).toBe(404);
-//   });
-// });
+  test("should read file", async () => {
+    await dbConnection.connectDB();
+    const fileContent = fs.readFileSync('book.csv');
+    const response = await request(server.getApp()).post('/api/bulk-upload').attach("file", fileContent, "book.csv");
+    expect(response.statusCode).toBe(200);
+  })
+});
+
+

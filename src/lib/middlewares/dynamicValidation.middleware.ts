@@ -1,4 +1,3 @@
-import CreateError from "http-errors";
 import { NextFunction, Request, Response } from "express";
 import validationConfig from "../config/validationConfig";
 
@@ -11,9 +10,11 @@ class DynamicValidationMiddleware {
     try {
 
       const path = req.url;
+      console.log("path", path);
+      
       const method = req.method;
       const key = `${path} ${method}`;
-      console.log(key);
+      console.log("key", key);
       if (Object.keys(validationConfig).includes(key)) {
         const schema = validationConfig[key];
         const toValidate = req.body;
@@ -25,9 +26,7 @@ class DynamicValidationMiddleware {
       }
       next();
     } catch (err) {
-      next(
-        CreateError(500, "internal server error(dynamic validation middleware)")
-      );
+      res.status(404).send("error in dynamic validation middleware")
     }
   };
 }

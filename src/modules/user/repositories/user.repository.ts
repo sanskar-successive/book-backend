@@ -10,7 +10,7 @@ class UserRepository extends BaseRepository<IUser>{
     }
     
     public getByEmail = async (email : string) : Promise<IUser | null> =>{
-        return await User.findOne({'contact.email' : email});
+        return await User.findOne({"contact.email" : email});
     }
 } 
 export default UserRepository;

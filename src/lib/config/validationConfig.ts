@@ -7,13 +7,13 @@ interface ValidateSchema {
 
 const validationConfig: ValidateSchema = {
     // book routes
-    "books POST" : bookSchema,
-    "books PATCH" : bookSchema,
+    "/books POST" : bookSchema,
+    "/books PATCH" : bookSchema,
 
     // user routes
-    "users POST" : userSchema,
-    "users PATCH" : userSchema,
-    "login POST" : loginSchema,
+    "/ POST" : userSchema,
+    "/ PATCH" : userSchema,
+    "/login POST" : loginSchema,
 
 };
 

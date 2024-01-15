@@ -36,9 +36,9 @@ class BookService {
   };
 
   // eslint-disable-next-line
-  public bulkWrite = async (books: any): Promise<void> => {
-    await this.bookRepo.bulkWrite(books);
-  };
+  // public bulkWrite = async (books: any): Promise<void> => {
+  //   await this.bookRepo.bulkWrite(books);
+  // };
 
 }
 

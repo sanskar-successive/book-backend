@@ -14,13 +14,13 @@ class BookRepository extends BaseRepository<IBook> {
     await Book.deleteMany({});
   };
 // eslint-disable-next-line
-  public bulkWrite = async (books : any) : Promise<void> =>{
-    await Book.bulkWrite(books, {ordered:false});
-  }
+  // public bulkWrite = async (books : any) : Promise<void> =>{
+  //   await Book.bulkWrite(books, {ordered:false});
+  // }
 
 
-  public getAllBulkUploads = async () : Promise<IBulkUpload[]> =>{
-    return await BulkUpload.find().limit(10);
-  }
+  // public getAllBulkUploads = async () : Promise<IBulkUpload[]> =>{
+  //   return await BulkUpload.find().limit(10);
+  // }
 }
 export default BookRepository;

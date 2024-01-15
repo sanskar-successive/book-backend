@@ -3,7 +3,6 @@ import BookService from "./book.service";
 import { IBook } from "./entities/IBook";
 import Papa from "papaparse";
 import fs from "fs";
-import { Worker } from "worker_threads";
 import Book from "./repositories/models/book.model";
 import mongoose from "mongoose";
 import { bookSchema } from "./book.validation";
@@ -12,6 +11,7 @@ import IBulkUpload from "./entities/IBulkUpload";
 import IBulkError from "./entities/IBulkError";
 import BulkErrorDetail from "./repositories/models/bulkError.model";
 import { v4 as uuidv4 } from "uuid";
+import { faker } from '@faker-js/faker';
 
 class BookController {
   private bookService: BookService;
@@ -26,9 +26,9 @@ class BookController {
       const books: IBook[] | null = await this.bookService.getAll();
       res
         .status(200)
-        .json({ message: "books fetched successfully", books: books });
+        .send({ message: "books fetched successfully", books: books });
     } catch (error) {
-      res.status(404).json(error);
+      res.status(404).send(error);
     }
   };
 
@@ -38,9 +38,9 @@ class BookController {
       const book: IBook | null = await this.bookService.getById(bookId);
       res
         .status(200)
-        .json({ message: "book fetched successfully", book: book });
+        .send({ message: "book fetched successfully", book: book });
     } catch (error) {
-      res.status(404).json(error);
+      res.status(404).send(error);
     }
   };
 
@@ -51,9 +51,9 @@ class BookController {
       );
       res
         .status(201)
-        .json({ message: "book created successfully", book: createdBook });
+        .send({ message: "book created successfully", book: createdBook });
     } catch (error) {
-      res.status(404).json(error);
+      res.status(404).send(error);
     }
   };
 
@@ -67,18 +67,18 @@ class BookController {
       );
       res
         .status(201)
-        .json({ message: "book updated successfully", updatedBook });
+        .send({ message: "book updated successfully", book: updatedBook });
     } catch (error) {
-      res.status(404).json(error);
+      res.status(404).send(error);
     }
   };
 
   public deleteAll = async (req: Request, res: Response): Promise<void> => {
     try {
       await this.bookService.deleteAll();
-      res.status(201).json({ message: "all books deleted successfully" });
+      res.status(201).send({ message: "all books deleted successfully" });
     } catch (error) {
-      res.status(404).json(error);
+      res.status(404).send(error);
     }
   };
 
@@ -88,71 +88,20 @@ class BookController {
       const deletedBook = await this.bookService.delete(bookId);
       res
         .status(201)
-        .json({ message: "book deleted successfully", deletedBook });
+        .send({ message: "book deleted successfully", book: deletedBook });
     } catch (error) {
-      res.status(404).json(error);
+      res.status(404).send(error);
     }
   };
 
-  // public bulkTest = async (req: Request, res: Response): Promise<void> => {
-  //   try {
-  //     const csvFile: Express.Multer.File | undefined = req.file;
-  //     console.log(csvFile?.path);
-
-  //     if (csvFile) {
-  //       const filePath = csvFile.path;
-
-  //       const numThreads = 4;
-
-  //       const fileStats = fs.statSync(filePath);
-  //       const fileSize = fileStats.size;
-  //       const chunkSize = Math.ceil(fileSize / numThreads);
-
-  //       for (let i = 0; i < numThreads; i++) {
-  //         const start = i * chunkSize;
-  //         const end = Math.min(fileSize, (i + 1) * chunkSize - 1);
-
-  //         const worker = new Worker("./dist/worker2.js", {
-  //           workerData: { id: i, start, end, filePath: filePath },
-  //         });
-
-  //         const startTime = Date.now();
-
-  //         worker.on("message", (message) => {
-  //           const endTime = Date.now();
-  //           console.log((endTime - startTime) / 1000);
-
-  //           message["timeTaken"] = (endTime - startTime) / 1000;
-
-  //           console.log(`worker ${i} thread message ==> `);
-  //           console.log(message);
-  //         });
-
-  //         worker.on("error", (error) => {
-  //           console.error(`worker ${i} thread error ==> ${error}`);
-  //         });
-
-  //         worker.on("exit", (code) => {
-  //           if (code !== 0) {
-  //             console.error(`Worker ${i} thread exited with code ${code}`);
-  //           }
-  //         });
-  //       }
-  //       res.send("CSV processing started. Check console for updates.");
-  //     } else {
-  //       res.status(404).json("no csv file selected");
-  //     }
-  //   } catch (error) {
-  //     res.status(404).json(error);
-  //   }
-  // };
 
   public search = async (req: Request, res: Response) => {
     try {
       //eslint-disable-next-line
       const query: any = req.query;
 
-      console.log("query",query);
+      console.log("headers", req.headers);
+
 
       const allCategories = [
         "fiction",
@@ -197,6 +146,8 @@ class BookController {
         }
       }
 
+      let andConditions = [];
+
       let categoryToFilter,
         languageToFilter,
         minPrice,
@@ -205,33 +156,71 @@ class BookController {
         skip,
         limit;
 
+      // if (Object.keys(query).includes("category")) {
+      //   if (Array.isArray(query["category"]))
+      //     categoryToFilter = query["category"];
+      //   else categoryToFilter = Array(query["category"]);
+      // } else {
+      //   categoryToFilter = allCategories;
+      // }
+
       if (Object.keys(query).includes("category")) {
         if (Array.isArray(query["category"]))
           categoryToFilter = query["category"];
         else categoryToFilter = Array(query["category"]);
-      } else {
-        categoryToFilter = allCategories;
+
+        andConditions.push({ category: { $in: categoryToFilter } });
       }
+
+      // if (Object.keys(query).includes("language")) {
+      //   if (Array.isArray(query["language"]))
+      //     languageToFilter = query["language"];
+      //   else languageToFilter = Array(query["language"]);
+      // } else {
+      //   languageToFilter = allLanguages;
+      // }
 
       if (Object.keys(query).includes("language")) {
         if (Array.isArray(query["language"]))
           languageToFilter = query["language"];
         else languageToFilter = Array(query["language"]);
-      } else {
-        languageToFilter = allLanguages;
+
+        andConditions.push({ "moreDetails.text_language": { $in: languageToFilter } });
       }
+
+      // if (Object.keys(query).includes("price.from")) {
+      //   minPrice = Number(query["price.from"]);
+      // } else {
+      //   minPrice = 50;
+      // }
+
 
       if (Object.keys(query).includes("price.from")) {
         minPrice = Number(query["price.from"]);
-      } else {
-        minPrice = 50;
+        andConditions.push({ price: { $gte: minPrice } })
       }
+
+      // if (Object.keys(query).includes("price.to")) {
+      //   maxPrice = Number(query["price.to"]);
+      // } else {
+      //   maxPrice = 2000;
+      // }
+
 
       if (Object.keys(query).includes("price.to")) {
         maxPrice = Number(query["price.to"]);
-      } else {
-        maxPrice = 2000;
+        andConditions.push({ price: { $lte: maxPrice } })
       }
+
+      // if (Object.keys(query).includes("rating")) {
+      //   if (query["rating"] === "aboveThree") {
+      //     minRating = 3;
+      //   } else {
+      //     minRating = 4;
+      //   }
+      // } else {
+      //   minRating = 0;
+      // }
 
       if (Object.keys(query).includes("rating")) {
         if (query["rating"] === "aboveThree") {
@@ -239,22 +228,34 @@ class BookController {
         } else {
           minRating = 4;
         }
-      } else {
-        minRating = 0;
+        andConditions.push({ rating: { $gte: minRating } })
       }
 
-      pipeline = pipeline.concat([
-        {
-          $match: {
-            $and: [
-              { category: { $in: categoryToFilter } },
-              { "moreDetails.text_language": { $in: languageToFilter } },
-              { price: { $gte: minPrice, $lte: maxPrice } },
-              { rating: { $gte: minRating, $lte: 5 } },
-            ],
-          },
-        },
-      ]);
+      if (andConditions.length > 0) {
+        pipeline = pipeline.concat([
+          {
+            $match: {
+              $and: andConditions
+            }
+          }
+        ])
+      }
+
+
+
+
+      // pipeline = pipeline.concat([
+      //   {
+      //     $match: {
+      //       $and: [
+      //         { category: { $in: categoryToFilter } },
+      //         { "moreDetails.text_language": { $in: languageToFilter } },
+      //         { price: { $gte: minPrice, $lte: maxPrice } },
+      //         { rating: { $gte: minRating, $lte: 5 } },
+      //       ],
+      //     },
+      //   },
+      // ]);
 
       if (Object.keys(query).includes("sortBy")) {
         if (query["sortBy"] === sortOptions[1]) {
@@ -310,19 +311,19 @@ class BookController {
         },
         {
           $limit: limit,
-        },
+        }
       ]);
 
       const books = await Book.aggregate(pipeline).exec();
 
-      console.log(books);
-      
+      // console.log(books);
+
 
       res
         .status(200)
-        .json({ message: "books fetched successfully", books: books });
+        .send({ message: "books fetched successfully", books: books });
     } catch (error) {
-      res.status(404).json(error);
+      res.status(404).send(error);
     }
   };
 
@@ -334,12 +335,12 @@ class BookController {
       const bulkUploads: IBulkUpload[] | null = await BulkUpload.find().limit(
         10
       );
-      res.status(200).json({
+      res.status(200).send({
         message: "fetching all bulk uploads data",
         bulkUploads: bulkUploads,
       });
     } catch (error) {
-      res.status(404).json(error);
+      res.status(404).send(error);
     }
   };
 
@@ -350,13 +351,15 @@ class BookController {
     try {
       const { sessionId } = req.params;
       const bulkUploadErrorDetail: IBulkError[] | null =
-        await BulkErrorDetail.find({ session_id: sessionId }).limit(10);
-      res.status(200).json({
+        await BulkErrorDetail.find({ session_id: sessionId }).limit(20);
+      console.log(bulkUploadErrorDetail);
+
+      res.status(200).send({
         message: "fetching all bulk uploads error details",
         bulkUploadErrorDetail: bulkUploadErrorDetail,
       });
     } catch (error) {
-      res.status(404).json(error);
+      res.status(404).send(error);
     }
   };
 
@@ -366,11 +369,11 @@ class BookController {
   ): Promise<void> => {
     try {
       await BulkErrorDetail.deleteMany({});
-      res.status(201).json({ message: "all bulk errors deleted successfully" });
+      res.status(201).send({ message: "all bulk errors deleted successfully" });
     } catch (error) {
       res
         .status(404)
-        .json({ message: "some error occured in deleting all bulk errors" });
+        .send({ message: "some error occured in deleting all bulk errors" });
     }
   };
 
@@ -434,7 +437,7 @@ class BookController {
                 errorCount += 1;
                 const bulkErrorDetail: IBulkError = {
                   rowNumber: parsedDataCount,
-                  errorDetails: Object(error.message),
+                  errorDetails: error.message.toString(),
                   session_id: session_id,
                 };
 
@@ -571,7 +574,7 @@ class BookController {
 
             const bulkErrorDetail: IBulkError = {
               rowNumber: parsedDataCount,
-              errorDetails: Object(error.message),
+              errorDetails: error.message.toString(),
               session_id: session_id,
             };
 
@@ -594,8 +597,48 @@ class BookController {
         res.status(406).send({ message: "no file selected" });
       }
     } catch (error) {
-      return res.status(404).json(error);
+      return res.status(404).send(error);
     }
   };
+
+
+
+  public generateRandom = (req: Request, res: Response) => {
+
+
+    const length = 20;
+    const result: any[] = [];
+
+    for (let i = 0; i < length; i++) {
+      const id = `id${Math.floor(Math.random() * 1000) + 1}`;
+      const name = faker.person.fullName();
+      const age = Math.floor(Math.random() * 100) + 1;
+
+
+
+      if (!result.includes(id) && !result.includes(name)) {
+        result.push({ id: id, name: name, age: age })
+      }
+
+    }
+
+    const { year } = req.query
+    const ageFilter = [];
+
+    for (let i = 0; i < length; i++) {
+
+
+      const ageToInclude = 2024 - Number(year);
+
+      if (result[i].age > ageToInclude) {
+        ageFilter.push(result[i]);
+      }
+    }
+
+    console.log(ageFilter);
+
+    res.send(result)
+
+  }
 }
 export default BookController;

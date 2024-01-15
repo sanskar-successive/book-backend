@@ -1,6 +1,6 @@
 interface IBulkError{
     rowNumber : number,
-    errorDetails : object,
+    errorDetails : string,
     session_id : string
 }
 

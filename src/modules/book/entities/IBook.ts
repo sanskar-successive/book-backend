@@ -13,14 +13,6 @@ export interface IAuthor{
     about : string,
 }
 
-export interface IReview{
-    userId : string,
-    bookId : string,
-    text : string,
-    rating : number,
-    positive ?: string
-}
-
 export interface IMoreDetails{
     seller : string,
     text_language : string,
