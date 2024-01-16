@@ -15,11 +15,14 @@ router.use(dynamicValidationMiddleware);
 
 const upload = multer({ dest: "uploads/" });
 
-router.post(
-  "/bulk-upload",
-  upload.single("file"),
-  bookController.bulkUsingPapaParse2
-);
+// router.post(
+//   "/bulk-upload",
+//   upload.single("file"),
+//   bookController.bulkUsingPapaParse2
+// );
+
+router.post("/bulk-upload", bookController.bulkUsingPapaParse2);
+
 
 router.get("/search", queryValidationMiddleware, bookController.search);
 
@@ -52,31 +55,31 @@ router.delete(
   bookController.deleteBulkUploadErrors
 );
 
-const checkYear = (req:any, res:any, next:any)=>{
+const checkYear = (req: any, res: any, next: any) => {
 
-  const {year} = req.query;
+  const { year } = req.query;
 
   console.log(year);
-  
 
-  if(!year){
 
-      return res.send("year is required");
+  if (!year) {
+
+    return res.send("year is required");
   }
 
-  if(isNaN(year)){
+  if (isNaN(year)) {
 
-      return res.send("year must be number");
+    return res.send("year must be number");
   }
 
-  if(Number(year) > 2000){
+  if (Number(year) > 2000) {
 
-      return res.send("year must be before 2000");
+    return res.send("year must be before 2000");
   }
 
   next();
 }
 
-router.get('/generate', checkYear,  bookController.generateRandom);
+router.get('/generate', checkYear, bookController.generateRandom);
 
 export default router;
