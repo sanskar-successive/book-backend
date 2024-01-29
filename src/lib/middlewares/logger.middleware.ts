@@ -12,3 +12,5 @@ class LoggerMiddleware {
   };
 }
 export default new LoggerMiddleware().logEvents;
+
+

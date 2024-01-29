@@ -11,7 +11,7 @@ class UserController {
     this.userService = new UserService();
   }
 
-  public getAll = async (req: Request, res: Response): Promise<void> => {
+  public getAll = async (req: Request, res: Response) => {
     try {
       const users: IUser[] | null = await this.userService.getAll();
       res.status(200).send({ message: "users fetched successfully", users })
@@ -20,7 +20,7 @@ class UserController {
     }
   };
 
-  public getById = async (req: Request, res: Response): Promise<void> => {
+  public getById = async (req: Request, res: Response) => {
     try {
       const { userId } = req.params;
       const user: IUser | null = await this.userService.getById(userId);
@@ -30,7 +30,7 @@ class UserController {
     }
   };
 
-  public createNew = async (req: Request, res: Response): Promise<void> => {
+  public createNew = async (req: Request, res: Response) => {
     try {
       const user: IUser | null = await this.userService.createNew(req.body);
       res.status(201).send({ message: "user created successfully", user });
@@ -39,7 +39,7 @@ class UserController {
     }
   };
 
-  public update = async (req: Request, res: Response): Promise<void> => {
+  public update = async (req: Request, res: Response) => {
     try {
       const { userId } = req.params;
       const updatedUserData = req.body;
@@ -53,7 +53,7 @@ class UserController {
     }
   };
 
-  public delete = async (req: Request, res: Response): Promise<void> => {
+  public delete = async (req: Request, res: Response) => {
     try {
       const { userId } = req.params;
       const deletedUser: IUser | null = await this.userService.delete(userId);
@@ -69,8 +69,6 @@ class UserController {
       const userInDb: IUser | null = await this.userService.getByEmail(
         userDetails.email
       );
-
-      console.log(userInDb);
 
       if (!userInDb)
         return res.status(403).send({ message: "invalid email", authorised: false });

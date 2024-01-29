@@ -45,7 +45,6 @@ export const querySchema = Joi.object({
   }),
 });
 
-
 class QueryValidationMiddleware {
   public queryValidation = (
     req: Request,

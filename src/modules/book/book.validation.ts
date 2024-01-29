@@ -18,7 +18,6 @@ export const authorSchema = Joi.object({
   about: Joi.string().required(),
 });
 
-
 export const bookSchema = Joi.object({
   title: Joi.string().required(),
   coverImage: Joi.string(),

@@ -31,7 +31,6 @@ const mockBook1 = {
     edition: 1,
   },
 };
-
 const mockBook2 = { ...mockBook1, title: "mockBook2" };
 const mockBook3 = { ...mockBook1, title: "mockBook3" };
 const mockBook4 = { ...mockBook1, title: "mockBook4" };

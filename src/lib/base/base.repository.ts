@@ -31,4 +31,5 @@ class BaseRepository<T> {
     return (await this.model.findByIdAndDelete(id)) as T;
   };
 }
+
 export default BaseRepository;

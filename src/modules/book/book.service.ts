@@ -39,7 +39,6 @@ class BookService {
   // public bulkWrite = async (books: any): Promise<void> => {
   //   await this.bookRepo.bulkWrite(books);
   // };
-
 }
 
 export default BookService;

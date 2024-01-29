@@ -2,7 +2,6 @@ import BaseRepository from "../../../lib/base/base.repository";
 import { IUser } from "../entities/IUser";
 import User from "./models/user.model";
 
-
 class UserRepository extends BaseRepository<IUser>{
 
     constructor(){

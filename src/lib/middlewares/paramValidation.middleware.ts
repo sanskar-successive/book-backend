@@ -9,8 +9,6 @@ class ParamValidationMiddleware {
     try {
       const {bookId} = req.params;
 
-      // 6 5 a 4 0 6 7 8 2 3 9 5 e 4 6 9 b e 9 1 9 b c f 
-
       if(isValidObjectId(bookId)){
         next();
       }
@@ -22,4 +20,5 @@ class ParamValidationMiddleware {
     }
   };
 }
+
 export default new ParamValidationMiddleware().paramValidation;

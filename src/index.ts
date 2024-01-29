@@ -5,3 +5,4 @@ const port = 5000;
 const dbConnection = DBConnection.getInstance();
 const server = Server.getInstance(dbConnection);
 server.start(port);
+

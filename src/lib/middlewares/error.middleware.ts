@@ -7,3 +7,4 @@ class ErrorHandler {
   }
 }
 export default new ErrorHandler().handleError;
+

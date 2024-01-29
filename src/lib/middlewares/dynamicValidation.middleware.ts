@@ -30,5 +30,4 @@ class DynamicValidationMiddleware {
     }
   };
 }
-
 export default new DynamicValidationMiddleware().dynamicValidation;

@@ -24,4 +24,5 @@ class CustomHeaderMiddleware {
     }
   };
 }
+
 export default CustomHeaderMiddleware;

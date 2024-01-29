@@ -138,7 +138,7 @@ describe("POST /users/login", () => {
       password : password
     });
     expect(res.statusCode).toBe(200);
-    expect(res.body.message).toBe("user logged in successfully");
+    expect(res.body.message).toBe("logged in successfully");
   });
 
   test("when user email is not found", async () => {
@@ -147,7 +147,7 @@ describe("POST /users/login", () => {
       password : "1234"
     });
     expect(res.statusCode).toBe(403);
-    expect(res.body.message).toBe("user not found (invalid email");
+    expect(res.body.message).toBe("invalid email");
   });
 
   test("when user email is corect but not the password", async () => {
@@ -158,7 +158,7 @@ describe("POST /users/login", () => {
       password : "987"
     });
     expect(res.statusCode).toBe(403);
-    expect(res.body.message).toBe("user invalid password" );
+    expect(res.body.message).toBe("invalid password" );
   });
 
   test("any error case", async () => {

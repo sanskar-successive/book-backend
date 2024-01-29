@@ -7,12 +7,10 @@ export interface IBook {
     author : IAuthor,
     moreDetails : IMoreDetails,
 }
-
 export interface IAuthor{
     name : string,
     about : string,
 }
-
 export interface IMoreDetails{
     seller : string,
     text_language : string,

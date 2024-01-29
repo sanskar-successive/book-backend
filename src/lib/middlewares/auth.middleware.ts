@@ -3,7 +3,6 @@ import { NextFunction, Request, Response } from "express";
 import UserService from "../../modules/user/user.service";
 import ILogin from "../../modules/user/entities/ILogin";
 
-
 const userService = new UserService();
 const SECRET_KEY = "123";
 

@@ -10,3 +10,4 @@ class NotFound {
 }
 
 export default new NotFound().pageNotFound;
+

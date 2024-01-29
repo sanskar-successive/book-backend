@@ -35,5 +35,4 @@ class UserService {
     return await this.repo.getByEmail(email);
   };
 }
-
 export default UserService;

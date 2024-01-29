@@ -12,5 +12,4 @@ const bulkUploadSchema: Schema<IBulkUpload> = new mongoose.Schema(
 );
 
 const BulkUpload = mongoose.model<IBulkUpload>("BulkUpload", bulkUploadSchema);
-
 export default BulkUpload;

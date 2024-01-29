@@ -12,7 +12,6 @@ const authorSchema: Schema<IAuthor> = new mongoose.Schema({
   },
 });
 
-
 const moreDetailsSchema: Schema<IMoreDetails> = new mongoose.Schema({
   publisher: {
     type: String,
