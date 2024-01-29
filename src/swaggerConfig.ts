@@ -19,5 +19,4 @@ const options : any = {
 };
 
 const swaggerSpec: any = swaggerJsdoc(options);
-
 export default swaggerSpec;

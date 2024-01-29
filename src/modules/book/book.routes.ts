@@ -20,7 +20,6 @@ const upload = multer({
   },
 });
 
-
 router.post(
   "/bulk-upload",
   upload.single("file"),

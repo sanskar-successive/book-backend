@@ -30,3 +30,4 @@ export const bookSchema = Joi.object({
   price: Joi.number().required(),
   moreDetails: moreDetailsSchema.required(),
 });
+

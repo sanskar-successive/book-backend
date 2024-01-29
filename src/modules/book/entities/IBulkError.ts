@@ -3,4 +3,5 @@ interface IBulkError{
     errorDetails : string,
     session_id : string
 }
+
 export default IBulkError;

@@ -6,8 +6,7 @@ import { IUser } from "./entities/IUser";
 
 class UserController {
   private userService: UserService;
-
-  constructor() {
+   constructor() {
     this.userService = new UserService();
   }
 

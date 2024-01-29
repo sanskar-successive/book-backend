@@ -15,5 +15,4 @@ const userSchema: Schema<IUser> = new Schema({
 });
 
 const User = model<IUser>("User", userSchema);
-
 export default User;

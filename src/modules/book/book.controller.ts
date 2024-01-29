@@ -101,7 +101,6 @@ class BookController {
       const query: any = req.query;
       const pipeline = buildPipeline(query);
       const books = await Book.aggregate(pipeline).exec();
-
       res
         .status(200)
         .send({ message: "books fetched successfully", books: books });

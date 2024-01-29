@@ -26,7 +26,6 @@ class BaseRepository<T> {
   ): Promise<T | null> => {
     return await this.model.findByIdAndUpdate(id, newData);
   };
-
   public delete = async (id: string | ObjectId): Promise<T | null> => {
     return (await this.model.findByIdAndDelete(id)) as T;
   };

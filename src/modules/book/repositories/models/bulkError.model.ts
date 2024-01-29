@@ -1,8 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import IBulkError from "../../entities/IBulkError";
 
-const bulkErrorSchema: Schema<IBulkError> = new mongoose.Schema(
-  
+const bulkErrorSchema: Schema<IBulkError> = new mongoose.Schema( 
   {
     rowNumber: { type: Number, required: true,unique:true },
     errorDetails: { type: String, required: true },

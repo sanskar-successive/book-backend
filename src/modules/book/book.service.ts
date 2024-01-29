@@ -34,11 +34,5 @@ class BookService {
   public deleteAll = async (): Promise<void> => {
     await this.bookRepo.deleteAll();
   };
-
-  // eslint-disable-next-line
-  // public bulkWrite = async (books: any): Promise<void> => {
-  //   await this.bookRepo.bulkWrite(books);
-  // };
 }
-
 export default BookService;

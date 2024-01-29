@@ -14,7 +14,6 @@ const validationConfig: ValidateSchema = {
     "/ POST" : userSchema,
     "/ PATCH" : userSchema,
     "/login POST" : loginSchema,
-
 };
 
 export default validationConfig;

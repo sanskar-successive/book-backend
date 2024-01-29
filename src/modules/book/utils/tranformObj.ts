@@ -13,6 +13,5 @@ export const transformRowData = (obj: any) => {
 
         currentObj[keys[keys.length - 1]] = obj[key];
     }
-
     return result;
 }

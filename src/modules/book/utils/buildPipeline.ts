@@ -79,5 +79,4 @@ export const buildPipeline = (query: Query): PipelineStage[] => {
     pipeline = pipeline.concat(buildSkipLimitStage(query));
 
     return pipeline;
-
 };

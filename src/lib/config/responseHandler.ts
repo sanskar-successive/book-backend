@@ -1,10 +1,7 @@
 import { Response } from "express";
 import { HttpError } from "http-errors";
 
-
-
 class SystemResponse{
-
     
     public static success = (res : Response, message : string, data : unknown)=>{
         

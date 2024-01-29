@@ -104,5 +104,4 @@ bookSchema.index(
 
 const Book = mongoose.model<IBook>("Book", bookSchema);
 
-
 export default Book;

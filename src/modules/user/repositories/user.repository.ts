@@ -7,7 +7,6 @@ class UserRepository extends BaseRepository<IUser>{
     constructor(){
         super(User);
     }
-    
     public getByEmail = async (email : string) : Promise<IUser | null> =>{
         return await User.findOne({"contact.email" : email});
     }
