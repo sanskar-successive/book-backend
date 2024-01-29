@@ -40,7 +40,6 @@ router.get("/search", bookController.search);
  *        '200':
  *          description: A list of books
  */
-
 router.get("/books", bookController.getAll);
 
 router.get("/books/:bookId", bookController.getById);

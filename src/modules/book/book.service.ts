@@ -35,4 +35,5 @@ class BookService {
     await this.bookRepo.deleteAll();
   };
 }
+
 export default BookService;

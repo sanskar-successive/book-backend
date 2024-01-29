@@ -12,7 +12,6 @@ export const moreDetailsSchema = Joi.object({
   edition: Joi.number(),
 });
 
-
 export const authorSchema = Joi.object({
   name: Joi.string().required(),
   about: Joi.string().required(),

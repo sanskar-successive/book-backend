@@ -94,7 +94,6 @@ class BookController {
     }
   };
 
-
   public search = async (req: Request, res: Response) => {
     try {
       //eslint-disable-next-line
