@@ -8,7 +8,7 @@ class BaseRepository<T> {
   }
 
   public getAll = async (): Promise<T[]> => {
-    return await this.model.find().limit(10);
+    return await this.model.find();
   };
 
   public getById = async (id: string | ObjectId): Promise<T | null> => {

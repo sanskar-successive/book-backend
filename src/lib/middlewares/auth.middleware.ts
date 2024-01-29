@@ -7,10 +7,12 @@ import ILogin from "../../modules/user/entities/ILogin";
 const userService = new UserService();
 const SECRET_KEY = "123";
 
-const checkUserInDb = async (decoded : ILogin) : Promise<Boolean>=>{
+const checkUserInDb = async (decoded : ILogin) =>{
     const user = await userService.getByEmail(decoded?.email);
-    if(!user) return false;
-    return true;
+    console.log("in auth middleware", user);
+    
+    // if(!user) return false;
+    return user;
 }
 
 class AuthMiddleware {
@@ -36,6 +38,7 @@ class AuthMiddleware {
           const user = await checkUserInDb(decoded as ILogin);
 
           if(user){
+
             next();
           }
           else{

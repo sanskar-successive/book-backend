@@ -81,7 +81,19 @@ const bookSchema: Schema<IBook> = new mongoose.Schema(
       type: Number,
       required: true,
     },
+
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    updatedBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
+
     moreDetails: moreDetailsSchema,
+
+  
   },
   { timestamps: true }
 );

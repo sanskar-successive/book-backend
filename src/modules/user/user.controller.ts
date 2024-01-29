@@ -30,6 +30,21 @@ class UserController {
     }
   };
 
+  public getByEmail = async (req: Request, res: Response) => {
+    try {
+      const token = req.headers.authorization;
+      if (token) {
+        const decoded = jwt.verify(token, "123") as ILogin;
+        const user: IUser | null = await this.userService.getByEmail(decoded.email);
+        return res.status(200).send({ message: "user fetched successfully", user });
+      }
+      return res.status(406).send("failed to fetch")
+     
+    } catch (error) {
+      res.status(404).send(error)
+    }
+  };
+
   public createNew = async (req: Request, res: Response): Promise<void> => {
     try {
       const user: IUser | null = await this.userService.createNew(req.body);

@@ -1,4 +1,5 @@
 export interface IUser {
+  [x: string]: any;
   firstName: string;
   lastName?: string;
   contact : {

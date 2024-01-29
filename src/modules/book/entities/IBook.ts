@@ -6,6 +6,8 @@ export interface IBook {
     category : string,
     author : IAuthor,
     moreDetails : IMoreDetails,
+    createdBy : any,
+    updatedBy : any
 }
 
 export interface IAuthor{

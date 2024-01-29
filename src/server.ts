@@ -7,6 +7,9 @@ import loggerMiddleware from "./lib/middlewares/logger.middleware";
 import cors from "cors";
 import swaggerSpec from './swaggerConfig'
 import swaggerUi from "swagger-ui-express";
+import compression from 'compression'
+import { expressMiddleware } from "@apollo/server/express4";
+import { createApolloServer } from './graphql/apolloServer';
 
 class Server {
   private static instance: Server;
@@ -18,9 +21,10 @@ class Server {
     this.dbConnection = dbConnection;
     this.config();
     this.setRoutes();
-    this.setNotFound();
+    // this.setNotFound();
   }
   private config = async (): Promise<void> => {
+    this.app.use(compression())
     this.app.use(cors());
     this.app.use(express.json());
     this.app.use(cookieParser());
@@ -34,11 +38,10 @@ class Server {
     return Server.instance;
   }
 
-  private setRoutes = (): void => {
+  private setRoutes = async () => {
     this.app.use(router);
     this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-  };
-  private setNotFound = (): void => {
+    this.app.use("/graphql", expressMiddleware(await createApolloServer()));
     this.app.use(notFoundMiddlware);
   };
 
@@ -46,6 +49,7 @@ class Server {
     await this.dbConnection.connectDB();
     this.app.listen(PORT, () => {
       console.log(`server running on PORT ${PORT}`);
+      console.log(`GraphQL endpoint: http://localhost:${PORT}/graphql`);
     });
   };
 

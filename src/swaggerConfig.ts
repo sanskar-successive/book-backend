@@ -1,21 +1,35 @@
-import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerJsdoc from "swagger-jsdoc";
 
-const options : any = {
+const options: swaggerJsdoc.Options = {
     swaggerDefinition: {
-        openapi: '3.0.0',
+        openapi: "3.0.0",
         info: {
-            title: 'API Documentation',
-            version: '1.0.0',
-            description: 'API documentation for your Node.js app',
+            title: "API Documentation",
+            version: "1.0.0",
+            description: "API documentation for your Node.js app",
         },
         servers: [
             {
-                url: 'http://localhost:5000',
-                description: 'Development server',
+                url: "http://localhost:5000",
+                description: "Development server",
+            },
+        ],
+        components: {
+            securitySchemes: {
+                ApiKeyAuth: {
+                    type: "apiKey",
+                    in: "header",
+                    name: "Authorization",
+                },
+            },
+        },
+        security: [
+            {
+                ApiKeyAuth: [],
             },
         ],
     },
-    apis: ['src/**/*.ts'], // Path to the file with your API documentation
+    apis: ["src/**/*.ts"],
 };
 
 const swaggerSpec: any = swaggerJsdoc(options);

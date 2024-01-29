@@ -6,7 +6,15 @@ const bulkUploadSchema: Schema<IBulkUpload> = new mongoose.Schema(
     recordsProcessed: { type: Number, required: true },
     totalErrors: { type: Number, required: true },
     timeTaken: { type: Number, required: true },
-    session_id : {type : String, required : true}
+    session_id: { type: String, required: true },
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    updatedBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
   },
   { timestamps: true }
 );
