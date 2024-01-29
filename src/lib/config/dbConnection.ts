@@ -23,6 +23,7 @@ class DBConnection {
   };
 
   public closeDBConnection = async (): Promise<void> => {
+    console.log("db dis-connected successfully");
     await mongoose.connection.close();
   };
 }

@@ -2,12 +2,44 @@
 import express from 'express';
 import UserController from './user.controller';
 import dynamicValidationMiddleware from '../../lib/middlewares/dynamicValidation.middleware';
+import authMiddleware from '../../lib/middlewares/auth.middleware';
 const router = express.Router();
 
 const userController = new UserController();
 
 
 router.use(dynamicValidationMiddleware);
+
+/**
+ * @swagger
+ * /users/login:
+ *     post:
+ *       tags:
+ *         - "user login"
+ *       summary: login user
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 email:
+]*                   type: string
+ *                   description: user email
+ *                 password:
+ *                   type: password
+ *                   description: user password
+ *       responses:
+ *         '201':
+ *           description: User created successfully
+ *         '400':
+ *           description: Bad Request
+ *         '500':
+ *           description: Internal Server Error`
+ */
+
+router.post('/login', userController.login);
 
 /**
  * @swagger
@@ -56,6 +88,8 @@ router.use(dynamicValidationMiddleware);
 
 
 router.post('/', userController.createNew);
+
+router.use(authMiddleware);
 
 /**
  * @swagger
@@ -130,36 +164,7 @@ router.patch('/:userId', userController.update);
  */
 router.delete('/:userId', userController.delete);
 
-/**
- * @swagger
- * /users/login:
- *     post:
- *       tags:
- *         - "user login"
- *       summary: login user
- *       requestBody:
- *         required: true
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 email:
-]*                   type: string
- *                   description: user email
- *                 password:
- *                   type: password
- *                   description: user password
- *       responses:
- *         '201':
- *           description: User created successfully
- *         '400':
- *           description: Bad Request
- *         '500':
- *           description: Internal Server Error`
- */
 
-router.post('/login', userController.login);
 
 router.get('/account/home', userController.getByEmail);
 

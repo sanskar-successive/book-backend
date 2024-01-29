@@ -27,7 +27,6 @@ class BookController {
 
   public getAll = async (req: Request, res: Response): Promise<void> => {
     try {
-      console.log(req.query);
       const books: IBook[] | null = await this.bookService.getAll();
       res
         .status(200)
@@ -64,7 +63,7 @@ class BookController {
       }
       else {
         res
-          .status(406)
+          .status(403)
           .send({ message: "auth failed" });
       }
 

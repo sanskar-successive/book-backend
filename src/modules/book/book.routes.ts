@@ -92,6 +92,7 @@ router.use(dynamicValidationMiddleware);
 
 router.get("/search", queryValidationMiddleware, bookController.search);
 
+
 /**
  * @swagger
  * /api/books:
@@ -136,6 +137,7 @@ router.get("/books", bookController.getAll);
  */
 
 router.get("/books/:bookId", paramValidationMiddleware, bookController.getById);
+
 
 /**
  * @swagger
@@ -267,6 +269,8 @@ router.post("/books", bookController.createNew);
 
 router.patch("/books/:bookId", paramValidationMiddleware, bookController.update);
 
+
+
 /**
  * @swagger
  * /api/books:
@@ -309,6 +313,7 @@ router.delete("/books", bookController.deleteAll);
  */
 
 router.delete("/books/:bookId", paramValidationMiddleware, bookController.delete);
+
 
 /**
  * @swagger
