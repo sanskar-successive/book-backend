@@ -177,6 +177,8 @@ class BookController {
 
           step: async function (result, parser) {
             try {
+
+              
               const rowData = result.data;
               // eslint-disable-next-line
               const transformedObject: any = transformRowData(rowData);
