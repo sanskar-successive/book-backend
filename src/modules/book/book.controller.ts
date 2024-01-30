@@ -408,7 +408,7 @@ class BookController {
         Book.find(findConditions)
           .sort(sortCondition)
           .skip(Number(query["skip"]) || 0)
-          .limit(Number(query["limit"]) || 10)
+          .limit(Number(query["limit"]) || 20)
           .select(["_id", "title", "author.name", "price", "rating", "createdAt"]),
         Book.countDocuments(findConditions),
       ]);
