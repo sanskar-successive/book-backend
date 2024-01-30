@@ -45,10 +45,14 @@ class UserController {
     }
   };
 
-  public createNew = async (req: Request, res: Response): Promise<void> => {
+  public createNew = async (req: Request, res: Response) => {
     try {
+      const userToCheck: IUser | null = await this.userService.getByEmail(req.body.contact.email);
+      if(userToCheck){
+        return res.status(404).send({message: "user already registered"});
+      }
       const user: IUser | null = await this.userService.createNew(req.body);
-      res.status(201).send({ message: "user created successfully", user });
+      return res.status(201).send({ message: "user created successfully", user });
     } catch (error) {
       res.status(404).send(error)
     }
@@ -85,19 +89,18 @@ class UserController {
         userDetails.email
       );
 
-      console.log(userInDb);
-
       if (!userInDb)
-        return res.status(403).send({ message: "invalid email", authorised: false });
+        return res.status(403).send({ message: "invalid email" });
+
       if (userInDb.password !== userDetails.password) {
-        return res.status(403).send({ message: "invalid password", authorised: false });
+        return res.status(403).send({ message: "invalid password", userDetails });
       }
 
       const token: string = jwt.sign(userDetails, "123");
       return res.status(200).send({ message: "logged in successfully", token: token, authorised: true });
 
     } catch (error) {
-      res.status(404).send(error)
+      return res.status(404).send(error)
     }
   };
 }

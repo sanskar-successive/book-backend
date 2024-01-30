@@ -5,18 +5,20 @@ class ParamValidationMiddleware {
     req: Request,
     res: Response,
     next: NextFunction
-  ): void => {
+  ) => {
     try {
-      const {bookId} = req.params;
+      const { bookId } = req.params;
+
+      console.log("update book id", bookId);
+      
 
       // 6 5 a 4 0 6 7 8 2 3 9 5 e 4 6 9 b e 9 1 9 b c f 
 
-      if(isValidObjectId(bookId)){
-        next();
+      if (!isValidObjectId(bookId)) {
+        return res.status(406).send("not valid book id");
       }
-      else{
-        res.status(406).send("not valid book id");
-      }
+      next();
+
     } catch (error) {
       res.status(404).send(error);
     }

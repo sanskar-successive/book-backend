@@ -7,7 +7,7 @@ scanner(
     token: userToken,
     options: {
       "sonar.sources": "./src",
-      "sonar.exclusions": "**/*.test.ts,src/lib/middlewares/**,src/index.ts",
+      "sonar.exclusions": "**/*.test.ts,src/lib/middlewares/**,src/index.ts, src/modules/book/utils/",
     },
   },
   () => process.exit()

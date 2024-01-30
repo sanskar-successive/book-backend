@@ -89,7 +89,9 @@ router.post('/login', userController.login);
 
 router.post('/', userController.createNew);
 
-router.use(authMiddleware);
+
+
+// router.use(authMiddleware);
 
 /**
  * @swagger
@@ -106,7 +108,7 @@ router.use(authMiddleware);
  *        '500':
  *          description: Internal server error.
  */
-router.get('/', userController.getAll);
+router.get('/', authMiddleware, userController.getAll);
 
 /**
  * @swagger
@@ -132,11 +134,11 @@ router.get('/', userController.getAll);
  *       '500':
  *         description: Internal server error.
  */
-router.get('/:userId', userController.getById);
+router.get('/:userId', authMiddleware, userController.getById);
 
 
 
-router.patch('/:userId', userController.update);
+router.patch('/:userId',authMiddleware, userController.update);
 
 /**
  * @swagger
@@ -162,11 +164,11 @@ router.patch('/:userId', userController.update);
  *       '500':
  *         description: Internal server error.
  */
-router.delete('/:userId', userController.delete);
+router.delete('/:userId', authMiddleware, userController.delete);
 
 
 
-router.get('/account/home', userController.getByEmail);
+router.get('/account/home',authMiddleware, userController.getByEmail);
 
 
 export default router;

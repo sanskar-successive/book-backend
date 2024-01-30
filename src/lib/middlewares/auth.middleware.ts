@@ -28,7 +28,7 @@ class AuthMiddleware {
       
 
       if (!authToken) {
-        return res.status(403).send({message : "token not provided", authorised : false});
+        return res.status(403).send({message : "auth, token not provided", authorised : false});
       } 
 
       jwt.verify(authToken, SECRET_KEY, async (err, decoded)=>{

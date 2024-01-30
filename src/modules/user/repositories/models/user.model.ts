@@ -6,9 +6,11 @@ const userSchema: Schema<IUser> = new Schema({
   lastName: { type: String },
   contact: {
     type: {
-      email: { type: String, required: true},
-      phone: { type: String},
+      email: { type: String, required: true, unique: true },
+      phone: { type: String, unique : true },
     },
+    required:true,
+    unique : true
   },
   password: { type: String, required: true },
   confirmPassword: { type: String, required: true },
